@@ -101,3 +101,43 @@ export type UploadedAlbum = {
     coverImage: MediaItem | null
     sections: AlbumSection[]
 }
+
+
+
+// frontend types for fetched album
+export type ImageVariants = {
+    sm?: string
+    md?: string
+    lg?: string
+    xl?: string
+}
+
+export type VideoRendition = {
+    label: string
+    url: string
+}
+
+export type HLSVideo = {
+    hls: {
+        renditions: VideoRendition[]
+    }
+}
+
+export type AlbumSectionFrontend = {
+    id: string
+    title: string
+    slug: string
+    coverImage: ImageVariants | string | null
+    images: ImageVariants[]
+    videos: HLSVideo[]
+}
+
+export type AlbumFrontend = {
+    albumId: string
+    userId: string
+    title: string
+    description: string
+    eventDate: string
+    coverImage: ImageVariants | string | null
+    sections: AlbumSectionFrontend[]
+}
