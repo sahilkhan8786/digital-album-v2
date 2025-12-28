@@ -1,0 +1,27 @@
+// models/User.ts
+import mongoose, { Schema, Document, Model } from 'mongoose'
+
+export interface IUser extends Document {
+    clerkId: string // Clerk user ID
+    email: string
+    firstName?: string
+    lastName?: string
+    role: 'user' | 'admin'
+    createdAt: Date
+    updatedAt: Date
+}
+
+const UserSchema: Schema<IUser> = new Schema(
+    {
+        clerkId: { type: String, required: true, unique: true },
+        email: { type: String, required: true },
+        firstName: { type: String },
+        lastName: { type: String },
+        role: { type: String, enum: ['user', 'admin'], default: 'user' },
+    },
+    { timestamps: true }
+)
+
+const User: Model<IUser> = mongoose.models.User || mongoose.model<IUser>('User', UserSchema)
+
+export default User
