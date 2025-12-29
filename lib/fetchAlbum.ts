@@ -7,7 +7,7 @@ export const fetchAlbum = async () => {
     await dbConnect()
 
     const album = await Album.findById(
-        '6951eb4a5e074018ba7fdb1f'
+        '69521f8dbbd4b97cb31c0ae4'
     ).lean() // 🔥 important
 
     return album
