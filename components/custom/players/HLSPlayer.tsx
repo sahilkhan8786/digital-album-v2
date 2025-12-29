@@ -5,39 +5,53 @@ import Hls from 'hls.js'
 
 type Rendition = {
     label: string
-    url: string
 }
 
 interface HLSPlayerProps {
+    master: string
     renditions: Rendition[]
     width?: number
 }
 
-export default function HLSPlayer({ renditions, width = 640 }: HLSPlayerProps) {
+export default function HLSPlayer({
+    master,
+    renditions,
+    width = 640,
+}: HLSPlayerProps) {
+    console.log(renditions)
+
     const videoRef = useRef<HTMLVideoElement>(null)
-    const [currentRendition, setCurrentRendition] = useState<Rendition>(renditions[0])
+    const hlsRef = useRef<Hls | null>(null)
+    const [currentLevel, setCurrentLevel] = useState<number>(-1) // -1 = AUTO
 
-    // Initialize HLS.js
     useEffect(() => {
-        if (!videoRef.current) return
-        if (!currentRendition) return
-
         const video = videoRef.current
-
-        let hls: Hls | undefined
+        if (!video) return
 
         if (Hls.isSupported()) {
-            hls = new Hls({ autoStartLoad: true })
-            hls.loadSource(currentRendition.url)
-            hls.attachMedia(video)
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = currentRendition.url
-        }
+            const hls = new Hls({
+                autoStartLoad: true,
+                enableWorker: true,
+            })
 
-        return () => {
-            if (hls) hls.destroy()
+            hlsRef.current = hls
+            hls.loadSource(master)
+            hls.attachMedia(video)
+
+            return () => {
+                hls.destroy()
+                hlsRef.current = null
+            }
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = master
         }
-    }, [currentRendition])
+    }, [master])
+
+    const changeQuality = (level: number) => {
+        if (!hlsRef.current) return
+        hlsRef.current.currentLevel = level
+        setCurrentLevel(level)
+    }
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -48,21 +62,28 @@ export default function HLSPlayer({ renditions, width = 640 }: HLSPlayerProps) {
                 style={{ backgroundColor: 'black' }}
             />
 
-            {/* Resolution Selector */}
             <div>
                 <span>Resolution: </span>
-                {renditions.map((r) => (
+
+                <button
+                    onClick={() => changeQuality(-1)}
+                    style={{
+                        marginRight: 6,
+                        background: currentLevel === -1 ? '#333' : '#eee',
+                        color: currentLevel === -1 ? '#fff' : '#000',
+                    }}
+                >
+                    Auto
+                </button>
+
+                {renditions.map((r, i) => (
                     <button
                         key={r.label}
-                        onClick={() => setCurrentRendition(r)}
+                        onClick={() => changeQuality(i)}
                         style={{
                             marginRight: 6,
-                            padding: '2px 6px',
-                            backgroundColor: r.label === currentRendition.label ? '#333' : '#eee',
-                            color: r.label === currentRendition.label ? 'white' : 'black',
-                            border: 'none',
-                            borderRadius: 4,
-                            cursor: 'pointer',
+                            background: currentLevel === i ? '#333' : '#eee',
+                            color: currentLevel === i ? '#fff' : '#000',
                         }}
                     >
                         {r.label}

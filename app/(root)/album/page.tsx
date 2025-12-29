@@ -60,16 +60,18 @@ export default async function TestAlbumPage() {
 
                     {/* Videos */}
                     {section.videos?.map((video, i) => {
-                        if (!video.hls?.renditions) return null
+                        if (!video.hls?.master) return null
 
                         return (
                             <HLSPlayer
                                 key={i}
+                                master={video.hls.master}
                                 renditions={video.hls.renditions}
                                 width={400}
                             />
                         )
                     })}
+
 
                 </div>
             ))}
