@@ -6,7 +6,9 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: "digital-album.b-cdn.net"
+        hostname: "digital-album.b-cdn.net",
+        port: '',
+        pathname: '/**',
       },
       {
         protocol: 'https',

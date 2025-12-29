@@ -102,42 +102,37 @@ export type UploadedAlbum = {
     sections: AlbumSection[]
 }
 
-
-
-// frontend types for fetched album
-export type ImageVariants = {
+export interface ImageVariants {
     sm?: string
     md?: string
     lg?: string
     xl?: string
 }
 
-export type VideoRendition = {
+export interface VideoRendition {
     label: string
     url: string
 }
 
-export type HLSVideo = {
-    hls: {
+export interface Video {
+    hls?: {
+        master: string
         renditions: VideoRendition[]
     }
 }
 
-export type AlbumSectionFrontend = {
-    id: string
+export interface Section {
     title: string
     slug: string
-    coverImage: ImageVariants | string | null
+    coverImage: ImageVariants
     images: ImageVariants[]
-    videos: HLSVideo[]
+    videos: Video[]
 }
 
-export type AlbumFrontend = {
-    albumId: string
-    userId: string
+export interface AlbumFrontend {
     title: string
     description: string
     eventDate: string
-    coverImage: ImageVariants | string | null
-    sections: AlbumSectionFrontend[]
+    coverImage: ImageVariants
+    sections: Section[]
 }

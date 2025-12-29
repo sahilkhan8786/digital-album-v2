@@ -3,51 +3,74 @@ import Image from 'next/image'
 import HLSPlayer from '@/components/custom/players/HLSPlayer'
 import { AlbumFrontend } from '@/types/album'
 
-
 export default async function TestAlbumPage() {
     const album: AlbumFrontend | null = await fetchAlbum()
 
-    if (!album) return <div>Album not found</div>
+    if (!album) {
+        return <div>Album not found</div>
+    }
+
+    // ---- cover image resolver (TS-safe) ----
+    const coverSrc =
+        typeof album.coverImage === 'string'
+            ? album.coverImage
+            : album.coverImage?.md ??
+            album.coverImage?.sm ??
+            null
 
     return (
         <div>
             <h1>{album.title}</h1>
             <p>{album.description}</p>
 
-            {album.coverImage && (
+            {/* Cover Image */}
+            {coverSrc && (
                 <Image
-                    src={typeof album.coverImage === 'string' ? album.coverImage : album.coverImage.md || album.coverImage.sm || ''}
+                    src={coverSrc}
                     alt={album.title}
                     width={400}
                     height={300}
                 />
             )}
 
-            {album.sections.map((section) => (
+            {/* Sections */}
+            {album.sections?.map((section) => (
                 <div key={section.slug}>
                     <h2>{section.title}</h2>
 
                     {/* Images */}
-                    <div style={{ display: 'flex', gap: 8 }}>
-                        {section.images.map((img, i) => (
-                            <Image
-                                key={i}
-                                src={img.md || img.sm || ''}
-                                width={150}
-                                height={150}
-                                alt=""
-                            />
-                        ))}
-                    </div>
+                    {section.images && section.images.length > 0 && (
+                        <div style={{ display: 'flex', gap: 8 }}>
+                            {section.images.map((img, i) => {
+                                const imgSrc = img.md ?? img.sm ?? null
+                                if (!imgSrc) return null
+
+                                return (
+                                    <Image
+                                        key={i}
+                                        src={imgSrc}
+                                        width={150}
+                                        height={150}
+                                        alt=""
+                                    />
+                                )
+                            })}
+                        </div>
+                    )}
 
                     {/* Videos */}
-                    {section.videos.map((video, i) => (
-                        <HLSPlayer
-                            key={i}
-                            renditions={video.hls.renditions}
-                            width={400}
-                        />
-                    ))}
+                    {section.videos?.map((video, i) => {
+                        if (!video.hls?.renditions) return null
+
+                        return (
+                            <HLSPlayer
+                                key={i}
+                                renditions={video.hls.renditions}
+                                width={400}
+                            />
+                        )
+                    })}
+
                 </div>
             ))}
         </div>
