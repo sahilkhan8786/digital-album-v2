@@ -1,6 +1,6 @@
 'use client'
 
-import { Home, ImagePlusIcon, Settings } from "lucide-react"
+import { Home, ImagePlusIcon, Settings, User } from "lucide-react"
 import { usePathname } from "next/navigation"
 import {
     Sidebar,
@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/sidebar"
 import Logo from "./custom/navbar/logo"
 import Link from "next/link"
-import { UserButton } from "@clerk/nextjs"
 import { SidebarUser } from "./sidebar-user"
 
 // Menu items
@@ -28,6 +27,11 @@ const items = [
         title: "My Albums",
         url: "/dashboard/albums",
         icon: <ImagePlusIcon />,
+    },
+    {
+        title: "profile",
+        url: "/dashboard/profile",
+        icon: <User />,
     },
     {
         title: "Settings",

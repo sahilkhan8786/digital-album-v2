@@ -1,3 +1,4 @@
+import { BookmarkCheck } from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
 
@@ -26,7 +27,7 @@ const AuthWrapper = ({ children }: {
                     </div>
                     <div className="max-w-xl">
                         <div className="mb-6 inline-flex p-3 rounded-2xl bg-primary/20 text-primary backdrop-blur-sm border border-primary/20">
-                            <span className="material-symbols-outlined text-3xl">collections_bookmark</span>
+                            <BookmarkCheck />
                         </div>
                         <h1 className="text-4xl xl:text-5xl font-black leading-tight tracking-tight mb-6">
                             Capture the love,<br />share the joy.

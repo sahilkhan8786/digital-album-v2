@@ -9,6 +9,7 @@ export const fetchAlbum = async () => {
     const album = await Album.findById(
         '69521f8dbbd4b97cb31c0ae4'
     ).lean() // 🔥 important
+    console.log(album)
 
     return album
 }

@@ -5,6 +5,7 @@ import { SignUp } from '@clerk/nextjs'
 const RegisterForm = () => {
     return (
         <SignUp
+            afterSignOutUrl={'/'}
             forceRedirectUrl="/dashboard"
             appearance={{
                 variables: {

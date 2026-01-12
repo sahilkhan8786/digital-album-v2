@@ -48,10 +48,13 @@ export default function HLSPlayer({
     }, [master])
 
     const changeQuality = (level: number) => {
+
+        console.log(level)
         if (!hlsRef.current) return
         hlsRef.current.currentLevel = level
         setCurrentLevel(level)
     }
+    console.log(renditions)
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

@@ -7,6 +7,7 @@ import './../globals.css'
 import Navbar from '@/components/custom/navbar'
 import { ThemeProvider } from '@/components/theme-provider'
 import Footer from '@/components/custom/footer'
+import { dark } from '@clerk/themes'
 
 const splineSans = Spline_Sans({
   variable: '--font-spline-sans',
@@ -26,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider appearance={{ theme: dark }}>
       <html lang="en" suppressHydrationWarning>
         <body className={`${splineSans.variable}  antialiased`}>
           <ThemeProvider
